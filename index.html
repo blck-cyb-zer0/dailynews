@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Daily News</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg-color: #f9f9f9;
+        --text-color: #333;
+        --primary-color: #0066cc;
+        --card-bg: #fff;
+        --shadow: 0 2px 6px rgba(0,0,0,0.1);
+        --font-main: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-main); background: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+    header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1rem 2rem; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 10; }
+    .logo { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); text-decoration: none; }
+    nav ul { display: flex; list-style: none; gap: 1.5rem; }
+    nav a { text-decoration: none; color: #555; font-weight: 500; }
+    nav a:hover { color: var(--primary-color); }
+    .hero { background: url('https://picsum.photos/seed/news/1200/600') center/cover no-repeat; color: #fff; text-align: center; padding: 6rem 2rem; position: relative; }
+    .hero::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+    .hero h1 { position: relative; font-size: 2.5rem; margin-bottom: .5rem; }
+    .hero p { position: relative; font-size: 1.2rem; max-width: 700px; margin: 0 auto; }
+    main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .card { background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; height: 100%; }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; color: #222; }
+    .card p { margin: 0; font-size: .95rem; color: #666; }
+    .card .meta { font-size: .78rem; color: #999; margin-top: .5rem; }
+    footer { text-align: center; padding: 1rem; background: #eee; font-size: .85rem; color: #777; }
+    @media (max-width: 768px) {
+        .hero h1 { font-size: 2rem; }
+        .hero p { font-size: 1rem; }
+        nav ul { flex-direction: column; gap: .5rem; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <a href="#" class="logo">DailyNews</a>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">World</a></li>
+            <li><a href="#">Business</a></li>
+            <li><a href="#">Tech</a></li>
+            <li><a href="#">Sports</a></li>
+            <li><a href="#">Entertainment</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Breaking News: Global Markets Rally on Tech Earnings</h1>
+    <p>Latest updates, analysis, and expert opinions on today's top stories.</p>
+</section>
+
+<main>
+    <div class="grid" id="news-grid"></div>
+</main>
+
+<footer>
+    © 2025 DailyNews. All rights reserved.
+</footer>
+
+<script>
+    const newsData = [
+        { title: "Global Markets Rally on Tech Earnings", description: "Major indices climb as Apple, Microsoft, and Google report stronger‑than‑expected quarterly profits.", date: "Sep 24, 2025", img: "https://picsum.photos/seed/1/400/200" },
+        { title: "Climate Summit Ends with New Commitments", description: "World leaders agree on a revised target to cut carbon emissions by 50% by 2030.", date: "Sep 23, 2025", img: "https://picsum.photos/seed/2/400/200" },
+        { title: "New Smartphone Releases Offer Foldable Screens", description: "Samsung and Huawei unveil their latest foldable devices, promising improved battery life and performance.", date: "Sep 22, 2025", img: "https://picsum.photos/seed/3/400/200" },
+        { title: "SpaceX Launches 60‑Starlink Satellites", description: "The Falcon 9 rocket successfully deployed a batch of Starlink satellites, expanding global broadband coverage.", date: "Sep 21, 2025", img: "https://picsum.photos/seed/4/400/200" },
+        { title: "Olympics 2025: New Events Added", description: "Surfing and skateboarding confirmed for the 2025 Summer Games in Paris.", date: "Sep 20, 2025", img: "https://picsum.photos/seed/5/400/200" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('news-grid');
+        newsData.forEach(item => {
+            const article = document.createElement('article');
+            article.className = 'card';
+            article.innerHTML = `
+                <img src="${item.img}" alt="${item.title}">
+                <div class="card-content">
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <div class="meta">${item.date}</div>
+                </div>
+            `;
+            grid.appendChild(article);
+        });
+    });
+</script>
+
+</body>
+</html>
