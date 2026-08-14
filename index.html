@@ -2,100 +2,164 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Daily News</title>
+<title>DailyWire — Live News</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --bg-color: #f9f9f9;
-        --text-color: #333;
-        --primary-color: #0066cc;
-        --card-bg: #fff;
-        --shadow: 0 2px 6px rgba(0,0,0,0.1);
-        --font-main: 'Inter', sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-main); background: var(--bg-color); color: var(--text-color); line-height: 1.6; }
-    header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1rem 2rem; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 10; }
-    .logo { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); text-decoration: none; }
-    nav ul { display: flex; list-style: none; gap: 1.5rem; }
-    nav a { text-decoration: none; color: #555; font-weight: 500; }
-    nav a:hover { color: var(--primary-color); }
-    .hero { background: url('https://picsum.photos/seed/news/1200/600') center/cover no-repeat; color: #fff; text-align: center; padding: 6rem 2rem; position: relative; }
-    .hero::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
-    .hero h1 { position: relative; font-size: 2.5rem; margin-bottom: .5rem; }
-    .hero p { position: relative; font-size: 1.2rem; max-width: 700px; margin: 0 auto; }
-    main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .card { background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; height: 100%; }
-    .card img { width: 100%; height: 180px; object-fit: cover; }
-    .card-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; }
-    .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; color: #222; }
-    .card p { margin: 0; font-size: .95rem; color: #666; }
-    .card .meta { font-size: .78rem; color: #999; margin-top: .5rem; }
-    footer { text-align: center; padding: 1rem; background: #eee; font-size: .85rem; color: #777; }
-    @media (max-width: 768px) {
-        .hero h1 { font-size: 2rem; }
-        .hero p { font-size: 1rem; }
-        nav ul { flex-direction: column; gap: .5rem; }
-    }
+:root{--bg:#fbfaf6;--surface:#ffffff;--ink:#191c24;--muted:#6b6f7a;--rule:#dedad2;--accent:#c81e3a;--accent-2:#1d4e89;}
+[data-theme="dark"]{--bg:#0f1013;--surface:#17181d;--ink:#e9e7e0;--muted:#9a9ba3;--rule:#2b2d34;--accent:#ff5468;--accent-2:#6ea8e8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Source Serif 4',serif;line-height:1.6;transition:background .3s,color .3s;}
+a{color:inherit;}
+.masthead{background:var(--surface);border-bottom:2px solid var(--ink);position:sticky;top:0;z-index:20;}
+.masthead-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;}
+.hamburger,.theme-toggle{background:none;border:1px solid var(--rule);width:2.4rem;height:2.4rem;font-size:1.1rem;cursor:pointer;color:var(--ink);}
+.wordmark{font-family:'Zilla Slab',serif;font-weight:900;font-size:1.6rem;letter-spacing:-.02em;text-decoration:none;color:var(--ink);}
+.wordmark span{color:var(--accent);}
+.dateline{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;color:var(--muted);text-align:center;padding-bottom:.6rem;text-transform:uppercase;}
+.dropdown-nav{display:flex;flex-direction:column;max-height:0;overflow:hidden;transition:max-height .25s ease;background:var(--surface);}
+.dropdown-nav.open{max-height:200px;border-bottom:1px solid var(--rule);}
+.dropdown-nav a{padding:.9rem 1.25rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;}
+.ticker-wrap{background:var(--ink);color:var(--bg);overflow:hidden;white-space:nowrap;}
+.ticker{display:inline-flex;padding:.55rem 0;animation:scrollTicker 40s linear infinite;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.03em;}
+.ticker span{padding-right:3rem;}
+@keyframes scrollTicker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion: reduce){.ticker{animation:none;overflow-x:auto;}}
+main{max-width:1200px;margin:2rem auto;padding:0 1.1rem;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.6rem;}
+.card{background:var(--surface);border:1px solid var(--rule);display:flex;flex-direction:column;}
+.card img{width:100%;height:170px;object-fit:cover;}
+.card-body{padding:1rem;display:flex;flex-direction:column;gap:.5rem;flex:1;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--accent-2);display:flex;justify-content:space-between;text-transform:uppercase;}
+.eyebrow .code{color:var(--muted);}
+.card h3{font-family:'Zilla Slab',serif;font-weight:700;font-size:1.15rem;line-height:1.3;}
+.card p{font-size:.92rem;color:var(--muted);flex:1;}
+.card-footer{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;border-top:1px solid var(--rule);padding-top:.6rem;font-family:'JetBrains Mono',monospace;}
+.card-footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+.ad-card{border:1px dashed var(--accent-2);}
+.wire-down{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted);}
+.wire-down button{margin-top:1rem;padding:.6rem 1.2rem;background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;}
+footer{text-align:center;padding:2rem 1rem;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);}
+footer button{margin-top:.6rem;background:none;border:1px solid var(--rule);padding:.4rem .9rem;cursor:pointer;color:var(--ink);font-family:inherit;}
+footer a{color:var(--accent-2);}
 </style>
 </head>
 <body>
 
-<header>
-    <a href="#" class="logo">DailyNews</a>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">World</a></li>
-            <li><a href="#">Business</a></li>
-            <li><a href="#">Tech</a></li>
-            <li><a href="#">Sports</a></li>
-            <li><a href="#">Entertainment</a></li>
-        </ul>
-    </nav>
+<header class="masthead">
+  <div class="masthead-top">
+    <button class="hamburger" id="menuBtn" aria-label="Menu">☰</button>
+    <a href="index.html" class="wordmark">DAILY<span>WIRE</span></a>
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">🌙</button>
+  </div>
+  <div class="dateline">— LIVE DISPATCH — <span id="liveClock"></span></div>
+  <nav class="dropdown-nav" id="dropdownNav">
+    <a href="index.html">Home</a>
+    <a href="help.html">Help</a>
+  </nav>
 </header>
 
-<section class="hero">
-    <h1>Breaking News: Global Markets Rally on Tech Earnings</h1>
-    <p>Latest updates, analysis, and expert opinions on today's top stories.</p>
-</section>
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"><span>Loading wire…</span></div>
+</div>
 
 <main>
-    <div class="grid" id="news-grid"></div>
+  <div class="grid" id="newsGrid"></div>
 </main>
 
 <footer>
-    © 2025 DailyNews. All rights reserved.
+  <div id="updatedStamp">Loading…</div>
+  <button id="refreshBtn">↻ Refresh wire</button><br>
+  <a href="help.html">Help / Contact</a>
 </footer>
 
 <script>
-    const newsData = [
-        { title: "Global Markets Rally on Tech Earnings", description: "Major indices climb as Apple, Microsoft, and Google report stronger‑than‑expected quarterly profits.", date: "Sep 24, 2025", img: "https://picsum.photos/seed/1/400/200" },
-        { title: "Climate Summit Ends with New Commitments", description: "World leaders agree on a revised target to cut carbon emissions by 50% by 2030.", date: "Sep 23, 2025", img: "https://picsum.photos/seed/2/400/200" },
-        { title: "New Smartphone Releases Offer Foldable Screens", description: "Samsung and Huawei unveil their latest foldable devices, promising improved battery life and performance.", date: "Sep 22, 2025", img: "https://picsum.photos/seed/3/400/200" },
-        { title: "SpaceX Launches 60‑Starlink Satellites", description: "The Falcon 9 rocket successfully deployed a batch of Starlink satellites, expanding global broadband coverage.", date: "Sep 21, 2025", img: "https://picsum.photos/seed/4/400/200" },
-        { title: "Olympics 2025: New Events Added", description: "Surfing and skateboarding confirmed for the 2025 Summer Games in Paris.", date: "Sep 20, 2025", img: "https://picsum.photos/seed/5/400/200" }
-    ];
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('wireTheme', theme);
+}
+applyTheme(localStorage.getItem('wireTheme') || 'light');
+themeBtn.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const grid = document.getElementById('news-grid');
-        newsData.forEach(item => {
-            const article = document.createElement('article');
-            article.className = 'card';
-            article.innerHTML = `
-                <img src="${item.img}" alt="${item.title}">
-                <div class="card-content">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
-                    <div class="meta">${item.date}</div>
-                </div>
-            `;
-            grid.appendChild(article);
-        });
-    });
+const menuBtn = document.getElementById('menuBtn');
+const dropdownNav = document.getElementById('dropdownNav');
+menuBtn.addEventListener('click', e => { e.stopPropagation(); dropdownNav.classList.toggle('open'); });
+document.addEventListener('click', e => { if(!dropdownNav.contains(e.target) && !menuBtn.contains(e.target)) dropdownNav.classList.remove('open'); });
+
+function updateClock(){
+  document.getElementById('liveClock').textContent = new Date().toLocaleString(undefined,{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+updateClock();
+setInterval(updateClock, 30000);
+
+const RSS_URL = 'http://feeds.bbci.co.uk/news/rss.xml';
+const API = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL);
+const AD = {
+  title: 'ZER0-UPDATES — more from blck-cyb-zer0',
+  desc: 'Check out my other project for more updates and tools.',
+  link: 'https://blck-cyb-zer0.github.io/ZER0-UPDATES/',
+  img: 'https://picsum.photos/seed/zer0updates/600/360'
+};
+
+function stripHtml(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function renderTicker(items){
+  const headlines = items.slice(0,15).map(i => i.title).join('   ★   ');
+  document.getElementById('ticker').innerHTML = `<span>${headlines}</span><span aria-hidden="true">${headlines}</span>`;
+}
+
+function renderGrid(items){
+  const grid = document.getElementById('newsGrid');
+  const list = items.slice(0,11).map((item,i) => {
+    const descRaw = stripHtml(item.description).slice(0,130);
+    const img = item.thumbnail || `https://picsum.photos/seed/${encodeURIComponent(item.title)}/600/360`;
+    const cat = (item.categories && item.categories[0]) ? item.categories[0].toUpperCase() : 'NEWS';
+    const code = 'BBC-' + (1000 + (i*37)%9000);
+    const date = new Date(item.pubDate).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    return `<article class="card">
+      <img src="${img}" alt="" loading="lazy">
+      <div class="card-body">
+        <div class="eyebrow">${cat} <span class="code">${code}</span></div>
+        <h3>${item.title}</h3>
+        <p>${descRaw}${descRaw.length>=130?'…':''}</p>
+        <div class="card-footer"><span>${date}</span><a href="${item.link}" target="_blank" rel="noopener">Read on BBC →</a></div>
+      </div></article>`;
+  });
+  list.splice(4, 0, `<article class="card ad-card">
+    <img src="${AD.img}" alt="">
+    <div class="card-body">
+      <div class="eyebrow">SPONSORED <span class="code">AD</span></div>
+      <h3>${AD.title}</h3>
+      <p>${AD.desc}</p>
+      <div class="card-footer"><span>Advertisement</span><a href="${AD.link}" target="_blank" rel="noopener">Visit site →</a></div>
+    </div></article>`);
+  grid.innerHTML = list.join('');
+}
+
+async function fetchNews(){
+  const grid = document.getElementById('newsGrid');
+  try {
+    const res = await fetch(API);
+    const data = await res.json();
+    if(data.status !== 'ok' || !data.items || !data.items.length) throw new Error('bad feed');
+    renderTicker(data.items);
+    renderGrid(data.items);
+    document.getElementById('updatedStamp').textContent = 'Wire updated ' + new Date().toLocaleTimeString();
+  } catch(err){
+    grid.innerHTML = '<div class="wire-down"><p>The wire is quiet right now.</p><button id="retryBtn">↻ Retry</button></div>';
+    document.getElementById('retryBtn')?.addEventListener('click', fetchNews);
+    document.getElementById('ticker').innerHTML = '<span>Wire connection interrupted — tap retry below</span>';
+  }
+}
+document.getElementById('refreshBtn').addEventListener('click', fetchNews);
+fetchNews();
+setInterval(fetchNews, 10*60*1000);
 </script>
-
 </body>
 </html>
