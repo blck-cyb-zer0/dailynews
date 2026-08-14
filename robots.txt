@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://blck-cyb-zer0.github.io/dailynews/sitemap.xml

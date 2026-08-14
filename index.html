@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>DailyWire — Live News</title>
+<title>DailyWire — Cyber, Tech & Crypto News</title>
+<meta name="description" content="DailyWire tracks breaking cybersecurity, tech/AI, and crypto news in one live feed, with short editorial takes on what each story actually means.">
+<meta name="keywords" content="cybersecurity news, tech news, AI news, crypto news, hacking news, breach news">
+<meta property="og:title" content="DailyWire — Cyber, Tech & Crypto News">
+<meta property="og:description" content="Live cybersecurity, tech/AI, and crypto headlines with editorial takes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blck-cyb-zer0.github.io/dailynews/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://blck-cyb-zer0.github.io/dailynews/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -16,10 +24,13 @@ a{color:inherit;}
 .hamburger,.theme-toggle{background:none;border:1px solid var(--rule);width:2.4rem;height:2.4rem;font-size:1.1rem;cursor:pointer;color:var(--ink);}
 .wordmark{font-family:'Zilla Slab',serif;font-weight:900;font-size:1.6rem;letter-spacing:-.02em;text-decoration:none;color:var(--ink);}
 .wordmark span{color:var(--accent);}
-.dateline{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;color:var(--muted);text-align:center;padding-bottom:.6rem;text-transform:uppercase;}
+.dateline{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:.6rem;text-transform:uppercase;}
 .dropdown-nav{display:flex;flex-direction:column;max-height:0;overflow:hidden;transition:max-height .25s ease;background:var(--surface);}
-.dropdown-nav.open{max-height:200px;border-bottom:1px solid var(--rule);}
+.dropdown-nav.open{max-height:250px;border-bottom:1px solid var(--rule);}
 .dropdown-nav a{padding:.9rem 1.25rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;}
+.filters{display:flex;gap:.5rem;padding:.7rem 1.1rem;overflow-x:auto;border-bottom:1px solid var(--rule);background:var(--surface);}
+.filter-btn{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:.4rem .8rem;border:1px solid var(--rule);background:var(--bg);color:var(--ink);cursor:pointer;}
+.filter-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
 .ticker-wrap{background:var(--ink);color:var(--bg);overflow:hidden;white-space:nowrap;}
 .ticker{display:inline-flex;padding:.55rem 0;animation:scrollTicker 40s linear infinite;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.03em;}
 .ticker span{padding-right:3rem;}
@@ -33,8 +44,10 @@ main{max-width:1200px;margin:2rem auto;padding:0 1.1rem;}
 .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--accent-2);display:flex;justify-content:space-between;text-transform:uppercase;}
 .eyebrow .code{color:var(--muted);}
 .card h3{font-family:'Zilla Slab',serif;font-weight:700;font-size:1.15rem;line-height:1.3;}
-.card p{font-size:.92rem;color:var(--muted);flex:1;}
-.card-footer{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;border-top:1px solid var(--rule);padding-top:.6rem;font-family:'JetBrains Mono',monospace;}
+.card p{font-size:.92rem;color:var(--muted);}
+.take{font-size:.82rem;background:var(--bg);border-left:3px solid var(--accent);padding:.5rem .7rem;color:var(--ink);}
+.take b{color:var(--accent);}
+.card-footer{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;border-top:1px solid var(--rule);padding-top:.6rem;font-family:'JetBrains Mono',monospace;margin-top:auto;}
 .card-footer a{color:var(--accent);text-decoration:none;font-weight:600;}
 .ad-card{border:1px dashed var(--accent-2);}
 .wire-down{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted);}
@@ -52,12 +65,19 @@ footer a{color:var(--accent-2);}
     <a href="index.html" class="wordmark">DAILY<span>WIRE</span></a>
     <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">🌙</button>
   </div>
-  <div class="dateline">— LIVE DISPATCH — <span id="liveClock"></span></div>
+  <div class="dateline">CYBER · TECH/AI · CRYPTO — <span id="liveClock"></span></div>
   <nav class="dropdown-nav" id="dropdownNav">
     <a href="index.html">Home</a>
     <a href="help.html">Help</a>
   </nav>
 </header>
+
+<div class="filters" id="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="cyber">Cyber</button>
+  <button class="filter-btn" data-cat="tech">Tech/AI</button>
+  <button class="filter-btn" data-cat="crypto">Crypto</button>
+</div>
 
 <div class="ticker-wrap">
   <div class="ticker" id="ticker"><span>Loading wire…</span></div>
@@ -89,13 +109,16 @@ menuBtn.addEventListener('click', e => { e.stopPropagation(); dropdownNav.classL
 document.addEventListener('click', e => { if(!dropdownNav.contains(e.target) && !menuBtn.contains(e.target)) dropdownNav.classList.remove('open'); });
 
 function updateClock(){
-  document.getElementById('liveClock').textContent = new Date().toLocaleString(undefined,{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('liveClock').textContent = new Date().toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 updateClock();
 setInterval(updateClock, 30000);
 
-const RSS_URL = 'http://feeds.bbci.co.uk/news/rss.xml';
-const API = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL);
+const FEEDS = [
+  { cat: 'cyber',  label: 'CYBER',   url: 'https://feeds.feedburner.com/TheHackersNews' },
+  { cat: 'tech',   label: 'TECH/AI', url: 'https://techcrunch.com/feed/' },
+  { cat: 'crypto', label: 'CRYPTO',  url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' }
+];
 const AD = {
   title: 'ZER0-UPDATES — more from blck-cyb-zer0',
   desc: 'Check out my other project for more updates and tools.',
@@ -109,47 +132,85 @@ function stripHtml(html){
   return tmp.textContent || tmp.innerText || '';
 }
 
+function editorTake(title, cat){
+  const t = title.toLowerCase();
+  if(t.includes('breach')||t.includes('ransomware')||t.includes('leak')) return "Our take: another reminder that patching fast and enforcing MFA is still the cheapest insurance you'll buy.";
+  if(t.includes('vulnerab')||t.includes('exploit')||t.includes('cve')) return "Our take: check if this touches your stack before it hits a scanner report.";
+  if(t.includes('ai')||t.includes('openai')||t.includes('model')) return "Our take: another data point in how fast the AI landscape is moving — worth watching, not panicking over.";
+  if(t.includes('funding')||t.includes('raises')||t.includes('valuation')) return "Our take: follow the money — funding rounds usually hint at where the next 12 months of the space are headed.";
+  if(t.includes('bitcoin')||t.includes('btc')) return "Our take: BTC price swings make headlines, but the underlying adoption trend matters more than any single day.";
+  if(t.includes('ethereum')||t.includes('eth')||t.includes('defi')) return "Our take: keep an eye on gas fees and protocol upgrades tied to this — that's where the real signal is.";
+  if(t.includes('regulat')||t.includes('sec ')||t.includes('lawsuit')) return "Our take: regulatory moves like this tend to ripple further than the headline suggests.";
+  if(cat==='cyber') return "Our take: worth a closer read if you manage any exposed infrastructure.";
+  if(cat==='crypto') return "Our take: markets move fast on news like this — don't trade on the headline alone.";
+  return "Our take: one to bookmark and revisit as more details surface.";
+}
+
 function renderTicker(items){
-  const headlines = items.slice(0,15).map(i => i.title).join('   ★   ');
+  const headlines = items.slice(0,18).map(i => `[${i._cat}] ${i.title}`).join('   ★   ');
   document.getElementById('ticker').innerHTML = `<span>${headlines}</span><span aria-hidden="true">${headlines}</span>`;
 }
 
-function renderGrid(items){
+let ALL_ITEMS = [];
+let currentFilter = 'all';
+
+function renderGrid(){
   const grid = document.getElementById('newsGrid');
-  const list = items.slice(0,11).map((item,i) => {
-    const descRaw = stripHtml(item.description).slice(0,130);
+  const filtered = currentFilter === 'all' ? ALL_ITEMS : ALL_ITEMS.filter(i => i._cat === currentFilter);
+  const list = filtered.slice(0,18).map((item,i) => {
+    const descRaw = stripHtml(item.description).slice(0,120);
     const img = item.thumbnail || `https://picsum.photos/seed/${encodeURIComponent(item.title)}/600/360`;
-    const cat = (item.categories && item.categories[0]) ? item.categories[0].toUpperCase() : 'NEWS';
-    const code = 'BBC-' + (1000 + (i*37)%9000);
     const date = new Date(item.pubDate).toLocaleDateString(undefined,{month:'short',day:'numeric'});
     return `<article class="card">
       <img src="${img}" alt="" loading="lazy">
       <div class="card-body">
-        <div class="eyebrow">${cat} <span class="code">${code}</span></div>
+        <div class="eyebrow">${item._label} <span class="code">${item._source}</span></div>
         <h3>${item.title}</h3>
-        <p>${descRaw}${descRaw.length>=130?'…':''}</p>
-        <div class="card-footer"><span>${date}</span><a href="${item.link}" target="_blank" rel="noopener">Read on BBC →</a></div>
+        <p>${descRaw}${descRaw.length>=120?'…':''}</p>
+        <div class="take"><b>Editor's take:</b> ${editorTake(item.title, item._cat)}</div>
+        <div class="card-footer"><span>${date}</span><a href="${item.link}" target="_blank" rel="noopener">Read source →</a></div>
       </div></article>`;
   });
-  list.splice(4, 0, `<article class="card ad-card">
-    <img src="${AD.img}" alt="">
-    <div class="card-body">
-      <div class="eyebrow">SPONSORED <span class="code">AD</span></div>
-      <h3>${AD.title}</h3>
-      <p>${AD.desc}</p>
-      <div class="card-footer"><span>Advertisement</span><a href="${AD.link}" target="_blank" rel="noopener">Visit site →</a></div>
-    </div></article>`);
-  grid.innerHTML = list.join('');
+  if(list.length > 4){
+    list.splice(4, 0, `<article class="card ad-card">
+      <img src="${AD.img}" alt="">
+      <div class="card-body">
+        <div class="eyebrow">SPONSORED <span class="code">AD</span></div>
+        <h3>${AD.title}</h3>
+        <p>${AD.desc}</p>
+        <div class="card-footer"><span>Advertisement</span><a href="${AD.link}" target="_blank" rel="noopener">Visit site →</a></div>
+      </div></article>`);
+  }
+  grid.innerHTML = list.join('') || '<div class="wire-down"><p>Nothing in this category right now.</p></div>';
+}
+
+document.getElementById('filters').addEventListener('click', e => {
+  if(!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  currentFilter = e.target.dataset.cat;
+  renderGrid();
+});
+
+async function fetchFeed(feed){
+  const api = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url);
+  const res = await fetch(api);
+  const data = await res.json();
+  if(data.status !== 'ok' || !data.items) return [];
+  return data.items.map(item => ({...item, _cat: feed.cat, _label: feed.label, _source: data.feed.title?.slice(0,14) || feed.label}));
 }
 
 async function fetchNews(){
   const grid = document.getElementById('newsGrid');
   try {
-    const res = await fetch(API);
-    const data = await res.json();
-    if(data.status !== 'ok' || !data.items || !data.items.length) throw new Error('bad feed');
-    renderTicker(data.items);
-    renderGrid(data.items);
+    const results = await Promise.allSettled(FEEDS.map(fetchFeed));
+    let merged = [];
+    results.forEach(r => { if(r.status === 'fulfilled') merged = merged.concat(r.value); });
+    if(!merged.length) throw new Error('all feeds failed');
+    merged.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+    ALL_ITEMS = merged;
+    renderTicker(merged);
+    renderGrid();
     document.getElementById('updatedStamp').textContent = 'Wire updated ' + new Date().toLocaleTimeString();
   } catch(err){
     grid.innerHTML = '<div class="wire-down"><p>The wire is quiet right now.</p><button id="retryBtn">↻ Retry</button></div>';
